@@ -6,8 +6,8 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	// TODO: 上线前换成你的真实域名，RSS 和 sitemap 里的链接都靠它
-	site: 'https://example.com',
+	// 站点地址：RSS、sitemap、分享卡片里的绝对链接都靠它
+	site: 'https://blog.lifeline20051231.workers.dev',
 	integrations: [mdx(), sitemap()],
 	markdown: {
 		shikiConfig: {
