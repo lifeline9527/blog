@@ -1,63 +1,62 @@
-# Astro Starter Kit: Blog
+# 我的技术笔记
 
-```sh
-npm create astro@latest -- --template blog
+个人技术博客，基于 [Astro](https://astro.build) 构建，纯静态站点。
+
+## 本地开发
+
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # 产物在 dist/
+npm run preview  # 预览构建结果
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+需要 Node.js >= 22.23.4。
 
-Features:
+## 写一篇新文章
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+在 `src/content/blog/` 新建 `.md` 文件，文件名会成为 URL（`my-post.md` → `/blog/my-post/`）：
 
-## 🚀 Project Structure
+```markdown
+---
+title: '文章标题'
+description: '一句话摘要，显示在列表页'
+pubDate: 2026-11-09
+tags: ['标签1', '标签2']
+draft: false
+---
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+正文……
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- `draft: true` 时只在本地可见，不会被构建上线
+- 图片放 `src/assets/`，用相对路径引用，构建时自动压缩成 WebP
+- 支持 `.mdx`，需要写组件时用
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## 改站点信息
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+| 要改什么 | 文件 |
+| --- | --- |
+| 站名、简介、作者、导航 | `src/consts.ts` |
+| 域名（影响 RSS 和 sitemap） | `astro.config.mjs` 的 `site` |
+| 配色、字号、代码块样式 | `src/styles/global.css` |
+| 页面结构 | `src/pages/` |
+| 文章页版式 | `src/layouts/BlogPost.astro` |
 
-Any static assets, like images, can be placed in the `public/` directory.
+## 目录结构
 
-## 🧞 Commands
+```
+src/
+├─ content/blog/     文章（Markdown）
+├─ pages/            路由
+├─ layouts/          页面版式
+├─ components/       头部、页脚、日期等
+├─ styles/global.css 全站样式
+└─ consts.ts         站点配置
+```
 
-All commands are run from the root of the project, from a terminal:
+## 部署
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+推送到 `main` 分支后由 Cloudflare Pages 自动构建部署。
 
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+构建配置：命令 `npm run build`，输出目录 `dist`。
