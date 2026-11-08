@@ -1,0 +1,88 @@
+---
+import { NAV_LINKS, SITE_TITLE } from '../consts';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+	href === '/' ? path === '/' : path.startsWith(href.replace(/\/$/, ''));
+---
+
+<header>
+	<nav>
+		<a class="brand" href="/">{SITE_TITLE}</a>
+		<div class="links">
+			{
+				NAV_LINKS.map((link) => (
+					<a href={link.href} class:list={[{ active: isActive(link.href) }]}>
+						{link.label}
+					</a>
+				))
+			}
+			<a href="/rss.xml" class="rss" title="RSS 订阅">RSS</a>
+		</div>
+	</nav>
+</header>
+
+<style>
+	header {
+		border-bottom: 1px solid var(--border);
+		background: var(--bg);
+	}
+
+	nav {
+		width: var(--content-width);
+		max-width: calc(100% - 2.5rem);
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		height: 64px;
+	}
+
+	.brand {
+		font-weight: 600;
+		font-size: 1em;
+		color: var(--text);
+		border-bottom: none;
+		white-space: nowrap;
+	}
+
+	.links {
+		display: flex;
+		align-items: center;
+		gap: 1.4rem;
+	}
+
+	.links a {
+		color: var(--text-muted);
+		font-size: 0.9em;
+		border-bottom: none;
+		transition: color 0.15s ease;
+	}
+
+	.links a:hover {
+		color: var(--text);
+	}
+
+	.links a.active {
+		color: var(--text);
+	}
+
+	.rss {
+		font-size: 0.8em;
+		letter-spacing: 0.04em;
+	}
+
+	@media (max-width: 560px) {
+		nav {
+			height: auto;
+			padding: 0.9rem 0;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+		.links {
+			gap: 1rem;
+		}
+	}
+</style>

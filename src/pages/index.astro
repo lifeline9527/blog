@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 6);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="intro">
+				<h1>{SITE_TITLE}</h1>
+				<p class="muted">{SITE_DESCRIPTION}</p>
+			</section>
+
+			<section class="latest">
+				<h2 class="section-title">最新文章</h2>
+				<ul class="post-list">
+					{
+						posts.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`}>
+									<span class="post-title">{post.data.title}</span>
+									<span class="post-meta">
+										<FormattedDate date={post.data.pubDate} />
+									</span>
+								</a>
+								{post.data.description && <p class="post-desc">{post.data.description}</p>}
+							</li>
+						))
+					}
+					{
+						posts.length === 0 && (
+							<li class="empty">还没有文章。在 src/content/blog/ 里新建一个 .md 文件就能开始写。</li>
+						)
+					}
+				</ul>
+				<p class="more">
+					<a href="/blog/">查看全部文章 →</a>
+				</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.intro {
+		margin-bottom: 3.5rem;
+	}
+
+	.intro h1 {
+		margin-bottom: 0.4rem;
+		font-size: 1.75em;
+	}
+
+	.intro p {
+		margin: 0;
+		font-size: 1em;
+	}
+
+	.section-title {
+		font-size: 0.82em;
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		margin: 0 0 1.2rem;
+	}
+
+	.post-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.post-list li {
+		padding: 1.1rem 0;
+		border-bottom: 1px solid var(--border);
+		margin: 0;
+	}
+
+	.post-list li a {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1.5rem;
+		color: var(--text);
+		border-bottom: none;
+	}
+
+	.post-list li a:hover .post-title {
+		color: var(--accent);
+	}
+
+	.post-title {
+		font-size: 1.05em;
+		font-weight: 500;
+		transition: color 0.15s ease;
+	}
+
+	.post-meta {
+		color: var(--text-muted);
+		font-size: 0.82em;
+		white-space: nowrap;
+	}
+
+	.post-desc {
+		margin: 0.3rem 0 0;
+		color: var(--text-muted);
+		font-size: 0.9em;
+		line-height: 1.7;
+	}
+
+	.empty {
+		color: var(--text-muted);
+	}
+
+	.more {
+		margin-top: 1.6rem;
+		font-size: 0.9em;
+	}
+</style>

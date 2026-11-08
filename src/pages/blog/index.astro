@@ -1,0 +1,131 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`文章 · ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1 class="page-title">文章</h1>
+			<p class="count muted">共 {posts.length} 篇</p>
+
+			{
+				tags.length > 0 && (
+					<div class="tags">
+						{tags.map((tag) => (
+							<span class="tag">{tag}</span>
+						))}
+					</div>
+				)
+			}
+
+			<ul class="post-list">
+				{
+					posts.map((post) => (
+						<li>
+							<a href={`/blog/${post.id}/`}>
+								<span class="post-title">{post.data.title}</span>
+								<span class="post-meta">
+									<FormattedDate date={post.data.pubDate} />
+								</span>
+							</a>
+							<p class="post-desc">{post.data.description}</p>
+							{post.data.tags.length > 0 && (
+								<div class="post-tags">
+									{post.data.tags.map((tag) => (
+										<span class="tag">{tag}</span>
+									))}
+								</div>
+							)}
+						</li>
+					))
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.page-title {
+		margin-bottom: 0.2rem;
+		font-size: 1.6em;
+	}
+
+	.count {
+		margin: 0 0 1.5rem;
+		font-size: 0.85em;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-bottom: 2rem;
+	}
+
+	.post-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.post-list li {
+		padding: 1.3rem 0;
+		border-bottom: 1px solid var(--border);
+		margin: 0;
+	}
+
+	.post-list li a {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1.5rem;
+		color: var(--text);
+		border-bottom: none;
+	}
+
+	.post-list li a:hover .post-title {
+		color: var(--accent);
+	}
+
+	.post-title {
+		font-size: 1.1em;
+		font-weight: 500;
+		transition: color 0.15s ease;
+	}
+
+	.post-meta {
+		color: var(--text-muted);
+		font-size: 0.82em;
+		white-space: nowrap;
+	}
+
+	.post-desc {
+		margin: 0.35rem 0 0.5rem;
+		color: var(--text-muted);
+		font-size: 0.9em;
+		line-height: 1.7;
+	}
+
+	.post-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+	}
+</style>

@@ -1,0 +1,47 @@
+---
+import { SITE_AUTHOR } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer>
+	<div class="inner">
+		<span>&copy; {year} {SITE_AUTHOR}</span>
+		<span class="dot">·</span>
+		<a href="/rss.xml">RSS</a>
+		<span class="dot">·</span>
+		<a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+	</div>
+</footer>
+
+<style>
+	footer {
+		border-top: 1px solid var(--border);
+		padding: 1.6rem 0;
+		color: var(--text-muted);
+		font-size: 0.82em;
+	}
+
+	.inner {
+		width: var(--content-width);
+		max-width: calc(100% - 2.5rem);
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	footer a {
+		color: var(--text-muted);
+		border-bottom: none;
+	}
+
+	footer a:hover {
+		color: var(--text);
+	}
+
+	.dot {
+		opacity: 0.4;
+	}
+</style>

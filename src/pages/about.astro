@@ -1,0 +1,31 @@
+---
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="关于"
+	description="关于这个博客和它的作者"
+	pubDate={new Date('2026-11-01')}
+	tags={['关于']}
+	heroImage={AboutHeroImage}
+>
+	<p>
+		这里是我的技术笔记。主要记录写代码过程中遇到的具体问题：怎么排查、为什么这么解、下次怎么少走弯路。
+	</p>
+
+	<p>
+		我倾向于把过程写清楚，而不是只贴结论。因为半年后回来看的人往往是我自己，那时候我需要的不是答案，是当时的思路。
+	</p>
+
+	<h2>这个站点怎么来的</h2>
+
+	<p>
+		用 <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> 搭建，内容全部是
+		Markdown 文件，构建成纯静态页面后托管在 CDN 上。没有数据库，没有后台，没有插件需要升级。
+	</p>
+
+	<p>
+		想联系我，或者发现文章里有错误，欢迎通过页脚的 RSS 关注更新。
+	</p>
+</Layout>
