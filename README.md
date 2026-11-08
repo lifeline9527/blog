@@ -15,7 +15,13 @@ npm run preview  # 预览构建结果
 
 ## 写一篇新文章
 
-在 `src/content/blog/` 新建 `.md` 文件，文件名会成为 URL（`my-post.md` → `/blog/my-post/`）：
+最快的办法是用脚本，会问你要标题、文件名、摘要、标签，然后自动生成 frontmatter：
+
+```bash
+npm run new
+```
+
+也可以手动在 `src/content/blog/` 新建 `.md` 文件，文件名会成为 URL（`my-post.md` → `/blog/my-post/`）：
 
 ```markdown
 ---
