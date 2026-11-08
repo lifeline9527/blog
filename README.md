@@ -63,6 +63,26 @@ src/
 
 ## 部署
 
-推送到 `main` 分支后由 Cloudflare Pages 自动构建部署。
+线上地址：<https://blog.lifeline20051231.workers.dev>
 
-构建配置：命令 `npm run build`，输出目录 `dist`。
+一条命令构建并发布到 Cloudflare Workers：
+
+```bash
+npm run deploy     # = astro build && wrangler deploy
+```
+
+首次在一台新机器上部署需要先登录一次：`npx wrangler login`。
+
+站点地址配置在 `wrangler.jsonc`（Worker 名称 `blog`），静态产物目录是 `dist/`。
+换自定义域名后记得同步改 `astro.config.mjs` 的 `site`，否则 RSS 和 sitemap 里的链接还是旧的。
+
+## 写作 → 上线 完整流程
+
+```bash
+npm run new                  # 1. 生成带 frontmatter 的文章模板
+# 2. 编辑 src/content/blog/xxx.md
+npm run dev                  # 3. 可选：本地预览 http://localhost:4321
+npm run deploy               # 4. 发布上线（约 15 秒）
+git add -A && git commit -m "新增文章：xxx" && git push   # 5. 备份到 GitHub
+```
+
