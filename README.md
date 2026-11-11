@@ -4,6 +4,17 @@
 
 ## 本地开发
 
+**最省事的用法：双击项目根目录下的两个 bat 文件**
+
+| 文件 | 作用 |
+| --- | --- |
+| `start-blog.bat` | 启动本地服务并自动打开浏览器（`http://localhost:4321`），关掉黑窗口即停止 |
+| `edit-posts.bat` | 用 VS Code 打开文章目录 `src/content/blog/` |
+
+`start-blog.bat` 带了 `--force`，重复双击不会报「另一个 dev server 已在运行」，会自动接管。
+
+命令行方式：
+
 ```bash
 npm install
 npm run dev      # http://localhost:4321
@@ -11,7 +22,9 @@ npm run build    # 产物在 dist/
 npm run preview  # 预览构建结果
 ```
 
-需要 Node.js >= 22.23.4。
+需要 Node.js >= 22.23.4（本机已装 26.13.0）。
+
+改文章保存后浏览器自动刷新，不用重启服务。服务运行时电脑关机、断网都不影响，因为所有内容都在本地。
 
 ## 写一篇新文章
 
@@ -61,9 +74,13 @@ src/
 └─ consts.ts         站点配置
 ```
 
-## 部署
+## 部署（暂时搁置）
 
-线上地址：<https://blog.lifeline20051231.workers.dev>
+> 状态：**已暂停**。`workers.dev` 域名在国内 DNS 被污染，大陆网络打不开（实测三个解析器返回
+> 三个不同 IP，且附带 `face:b00c` 的 Facebook IPv6 前缀）。要真正对外发布，需要绑自有域名
+> 或改用国内托管（腾讯云 EdgeOne Pages 等）。下文命令保留，环境是好的。
+
+已部署过的地址：<https://blog.lifeline20051231.workers.dev>
 
 一条命令构建并发布到 Cloudflare Workers：
 
@@ -76,13 +93,18 @@ npm run deploy     # = astro build && wrangler deploy
 站点地址配置在 `wrangler.jsonc`（Worker 名称 `blog`），静态产物目录是 `dist/`。
 换自定义域名后记得同步改 `astro.config.mjs` 的 `site`，否则 RSS 和 sitemap 里的链接还是旧的。
 
-## 写作 → 上线 完整流程
+## 写作 → 本地查看 完整流程
 
 ```bash
 npm run new                  # 1. 生成带 frontmatter 的文章模板
-# 2. 编辑 src/content/blog/xxx.md
-npm run dev                  # 3. 可选：本地预览 http://localhost:4321
-npm run deploy               # 4. 发布上线（约 15 秒）
-git add -A && git commit -m "新增文章：xxx" && git push   # 5. 备份到 GitHub
+# 2. 编辑 src/content/blog/xxx.md（双击 edit-posts.bat 直接打开该目录）
+npm run dev                  # 3. 本地预览 http://localhost:4321（或双击 start-blog.bat）
 ```
+
+想让代码有备份时再执行：
+
+```bash
+git add -A && git commit -m "新增文章：xxx" && git push
+```
+
 
